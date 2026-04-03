@@ -13,7 +13,32 @@ export default function ContactPage() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO: connect to backend / email service
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    const name = data.get("name") as string;
+    const email = data.get("email") as string;
+    const phone = data.get("phone") as string;
+    const date = data.get("date") as string;
+    const guests = data.get("guests") as string;
+    const activity = data.get("activity") as string;
+    const message = data.get("message") as string;
+
+    // Find activity label
+    const activityLabel =
+      activity === "other"
+        ? locale === "es" ? "Otro" : "Other"
+        : activityTranslations[locale][activity]?.title ||
+          activities.find((a) => a.id === activity)?.title ||
+          activity;
+
+    const whatsappMessage = locale === "es"
+      ? `🌴 *Nueva Reserva - Caribbean Adventure RD*\n\n👤 *Nombre:* ${name}\n📧 *Email:* ${email}\n📞 *Teléfono:* ${phone}\n📅 *Fecha:* ${date}\n👥 *Personas:* ${guests}\n🎯 *Actividad:* ${activityLabel}${message ? `\n💬 *Mensaje:* ${message}` : ""}`
+      : `🌴 *New Booking - Caribbean Adventure RD*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n📞 *Phone:* ${phone}\n📅 *Date:* ${date}\n👥 *Guests:* ${guests}\n🎯 *Activity:* ${activityLabel}${message ? `\n💬 *Message:* ${message}` : ""}`;
+
+    const encoded = encodeURIComponent(whatsappMessage);
+    window.open(`https://wa.me/18099743407?text=${encoded}`, "_blank");
+
     setSubmitted(true);
   }
 
@@ -49,6 +74,7 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="text"
+                      name="name"
                       required
                       placeholder={t("form.namePlaceholder")}
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-dark focus:outline-none focus:ring-2 focus:ring-ocean focus:border-transparent"
@@ -62,6 +88,7 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="email"
+                      name="email"
                       required
                       placeholder={t("form.emailPlaceholder")}
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-dark focus:outline-none focus:ring-2 focus:ring-ocean focus:border-transparent"
@@ -75,6 +102,7 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="tel"
+                      name="phone"
                       required
                       placeholder={t("form.phonePlaceholder")}
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-dark focus:outline-none focus:ring-2 focus:ring-ocean focus:border-transparent"
@@ -89,6 +117,7 @@ export default function ContactPage() {
                       </label>
                       <input
                         type="date"
+                        name="date"
                         required
                         className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-dark focus:outline-none focus:ring-2 focus:ring-ocean focus:border-transparent"
                       />
@@ -99,6 +128,7 @@ export default function ContactPage() {
                       </label>
                       <input
                         type="number"
+                        name="guests"
                         required
                         min={1}
                         max={50}
@@ -114,6 +144,7 @@ export default function ContactPage() {
                       {t("form.activity")} *
                     </label>
                     <select
+                      name="activity"
                       required
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-dark focus:outline-none focus:ring-2 focus:ring-ocean focus:border-transparent"
                     >
@@ -135,6 +166,7 @@ export default function ContactPage() {
                       {t("form.message")}
                     </label>
                     <textarea
+                      name="message"
                       rows={3}
                       placeholder={t("form.messagePlaceholder")}
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-dark focus:outline-none focus:ring-2 focus:ring-ocean focus:border-transparent resize-none"
