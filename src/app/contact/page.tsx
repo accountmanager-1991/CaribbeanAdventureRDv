@@ -123,6 +123,9 @@ export default function ContactPage() {
                           {activityTranslations[locale][a.id]?.title || a.title}
                         </option>
                       ))}
+                      <option value="other">
+                        {locale === "es" ? "Otro" : "Other"}
+                      </option>
                     </select>
                   </div>
 
@@ -232,7 +235,7 @@ export default function ContactPage() {
                 <div className="p-4">
                   <iframe
                     title="Caribbean Adventure RD Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3760.5!2d-70.6939!3d19.7934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDQ3JzM2LjIiTiA3MMKwNDEnMzguMCJX!5e0!3m2!1sen!2sdo!4v1"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1880.2!2d-70.6941!3d19.7908!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eb1cf8fa418b58d%3A0x5c4b0e5e2b7a2c1a!2sParque%20Central%20de%20Puerto%20Plata!5e1!3m2!1sen!2sdo!4v1"
                     width="100%"
                     height="300"
                     style={{ border: 0, borderRadius: "0.75rem" }}
