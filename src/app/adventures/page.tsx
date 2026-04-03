@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import ActivityCard from "@/components/ActivityCard";
-import {
-  activities,
-  categoryLabels,
-  type ActivityCategory,
-} from "@/data/activities";
+import { activities, type ActivityCategory } from "@/data/activities";
+import { useLanguage } from "@/context/LanguageContext";
 
 const allCategories: ("all" | ActivityCategory)[] = [
   "all",
@@ -19,9 +16,8 @@ const allCategories: ("all" | ActivityCategory)[] = [
 ];
 
 export default function AdventuresPage() {
-  const [selectedCategory, setSelectedCategory] = useState<
-    "all" | ActivityCategory
-  >("all");
+  const { t } = useLanguage();
+  const [selectedCategory, setSelectedCategory] = useState<"all" | ActivityCategory>("all");
 
   const filtered =
     selectedCategory === "all"
@@ -30,22 +26,15 @@ export default function AdventuresPage() {
 
   return (
     <>
-      {/* Page header */}
       <section className="bg-gradient-to-r from-ocean-dark to-ocean text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-3">Adventures in Puerto Plata</h1>
-          <p className="text-white/80 text-lg max-w-2xl">
-            Explore our curated collection of adventures and tours. Each
-            experience is led by local guides who know the Dominican Republic
-            like no one else.
-          </p>
+          <h1 className="text-4xl font-bold mb-3">{t("adventures.title")}</h1>
+          <p className="text-white/80 text-lg max-w-2xl">{t("adventures.subtitle")}</p>
         </div>
       </section>
 
-      {/* Filters + Grid */}
       <section className="py-12 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Category filters */}
           <div className="flex flex-wrap gap-2 mb-10">
             {allCategories.map((cat) => (
               <button
@@ -57,18 +46,16 @@ export default function AdventuresPage() {
                     : "bg-white text-gray-600 hover:bg-ocean-light/20 hover:text-ocean-dark"
                 }`}
               >
-                {cat === "all" ? "All Adventures" : categoryLabels[cat]}
+                {cat === "all" ? t("adventures.all") : t(`cat.${cat}`)}
               </button>
             ))}
           </div>
 
-          {/* Results count */}
           <p className="text-gray-600 mb-6">
-            Showing {filtered.length} adventure
-            {filtered.length !== 1 ? "s" : ""}
+            {t("adventures.showing")} {filtered.length}{" "}
+            {filtered.length !== 1 ? t("adventures.adventures") : t("adventures.adventure")}
           </p>
 
-          {/* Activity grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((activity) => (
               <ActivityCard key={activity.id} activity={activity} />
@@ -78,12 +65,8 @@ export default function AdventuresPage() {
           {filtered.length === 0 && (
             <div className="text-center py-16">
               <span className="text-6xl mb-4 block">🏝️</span>
-              <h3 className="text-xl font-bold text-gray-600 mb-2">
-                No adventures in this category yet
-              </h3>
-              <p className="text-gray-400">
-                Check back soon — we&apos;re adding new experiences all the time!
-              </p>
+              <h3 className="text-xl font-bold text-gray-600 mb-2">{t("adventures.noResults")}</h3>
+              <p className="text-gray-400">{t("adventures.noResultsDesc")}</p>
             </div>
           )}
         </div>

@@ -1,7 +1,14 @@
-import { Activity, categoryLabels } from "@/data/activities";
+"use client";
+
+import { Activity } from "@/data/activities";
+import { activityTranslations } from "@/data/translations";
+import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 
 export default function ActivityCard({ activity }: { activity: Activity }) {
+  const { locale, t } = useLanguage();
+  const at = activityTranslations[locale][activity.id];
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
       {/* Image placeholder */}
@@ -15,7 +22,7 @@ export default function ActivityCard({ activity }: { activity: Activity }) {
           {activity.category === "extreme" && "⚡"}
         </span>
         <span className="absolute top-3 left-3 bg-white/90 text-ocean text-xs font-semibold px-2 py-1 rounded-full">
-          {categoryLabels[activity.category]}
+          {t(`cat.${activity.category}`)}
         </span>
         {activity.difficulty !== "Easy" && (
           <span className="absolute top-3 right-3 bg-sunset text-white text-xs font-semibold px-2 py-1 rounded-full">
@@ -26,9 +33,11 @@ export default function ActivityCard({ activity }: { activity: Activity }) {
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-bold text-lg text-dark mb-1">{activity.title}</h3>
+        <h3 className="font-bold text-lg text-dark mb-1">
+          {at?.title || activity.title}
+        </h3>
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-          {activity.description}
+          {at?.description || activity.description}
         </p>
 
         {/* Meta */}
@@ -62,27 +71,20 @@ export default function ActivityCard({ activity }: { activity: Activity }) {
               </svg>
             ))}
           </div>
-          <span className="text-sm text-gray-600 font-medium">
-            {activity.rating}
-          </span>
+          <span className="text-sm text-gray-600 font-medium">{activity.rating}</span>
           <span className="text-sm text-gray-400">
-            ({activity.reviewCount} reviews)
+            ({activity.reviewCount} {t("card.reviews")})
           </span>
         </div>
 
-        {/* Price & CTA */}
+        {/* CTA */}
         <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
-          <div>
-            <span className="text-2xl font-bold text-ocean">
-              ${activity.price}
-            </span>
-            <span className="text-gray-400 text-sm"> / person</span>
-          </div>
+          <span className="text-sm text-gray-400">{activity.duration}</span>
           <Link
-            href={`/adventures/${activity.id}`}
+            href="/contact"
             className="bg-sunset hover:bg-sunset-dark text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors"
           >
-            View Details
+            {t("card.inquire")}
           </Link>
         </div>
       </div>
