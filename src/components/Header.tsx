@@ -27,7 +27,7 @@ export default function Header() {
             <Link href="/adventures" className="hover:text-ocean-light transition-colors">
               {t("nav.adventures")}
             </Link>
-            <Link href="#about" className="hover:text-ocean-light transition-colors">
+            <Link href="/about" className="hover:text-ocean-light transition-colors">
               {t("nav.about")}
             </Link>
             <Link href="/contact" className="hover:text-ocean-light transition-colors">
@@ -84,7 +84,7 @@ export default function Header() {
             <Link href="/adventures" className="hover:text-ocean-light transition-colors" onClick={() => setMenuOpen(false)}>
               {t("nav.adventures")}
             </Link>
-            <Link href="#about" className="hover:text-ocean-light transition-colors" onClick={() => setMenuOpen(false)}>
+            <Link href="/about" className="hover:text-ocean-light transition-colors" onClick={() => setMenuOpen(false)}>
               {t("nav.about")}
             </Link>
             <Link href="/contact" className="hover:text-ocean-light transition-colors" onClick={() => setMenuOpen(false)}>

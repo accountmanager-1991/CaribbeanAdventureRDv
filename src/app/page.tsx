@@ -55,7 +55,7 @@ export default function Home() {
                 {t("hero.cta1")}
               </Link>
               <Link
-                href="#about"
+                href="/about"
                 className="border-2 border-white/30 hover:border-white text-white px-8 py-3 rounded-lg font-bold text-lg transition-colors"
               >
                 {t("hero.cta2")}
