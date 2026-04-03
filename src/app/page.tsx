@@ -1,17 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import ActivityCard from "@/components/ActivityCard";
+import HeroCarousel from "@/components/HeroCarousel";
 import { activities, type ActivityCategory } from "@/data/activities";
 import { useLanguage } from "@/context/LanguageContext";
 
-const categoryIcons: Record<ActivityCategory, string> = {
-  "water-sports": "🤿",
-  nature: "🌿",
-  cultural: "🏛️",
-  food: "🍽️",
-  nightlife: "🌙",
-  extreme: "⚡",
+const categoryImages: Record<ActivityCategory, string> = {
+  "water-sports": "/images/tour-25.jpg",
+  nature: "/images/tour-21.jpg",
+  cultural: "/images/tour-11.jpg",
+  food: "/images/tour-03.jpg",
+  nightlife: "/images/tour-14.jpg",
+  extreme: "/images/tour-23.jpg",
 };
 
 const categoryKeys: ActivityCategory[] = [
@@ -30,13 +32,10 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-ocean-dark via-ocean to-palm text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 text-[200px] leading-none">🌴</div>
-          <div className="absolute bottom-10 right-10 text-[150px] leading-none">🌊</div>
-        </div>
+      <section className="relative text-white overflow-hidden min-h-[600px]">
+        <HeroCarousel />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
           <div className="max-w-3xl">
             <p className="text-ocean-light font-semibold text-sm uppercase tracking-widest mb-4">
               {t("hero.location")}
@@ -84,12 +83,19 @@ export default function Home() {
               <Link
                 key={cat}
                 href={`/adventures?category=${cat}`}
-                className="bg-sky hover:bg-ocean-light/30 rounded-xl p-6 text-center transition-colors group"
+                className="relative rounded-xl overflow-hidden h-40 group"
               >
-                <span className="text-4xl block mb-2 group-hover:scale-110 transition-transform inline-block">
-                  {categoryIcons[cat]}
-                </span>
-                <span className="text-sm font-semibold text-ocean-dark">{t(`cat.${cat}`)}</span>
+                <Image
+                  src={categoryImages[cat]}
+                  alt={t(`cat.${cat}`)}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  sizes="(max-width: 768px) 50vw, 16vw"
+                />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm text-center px-2">{t(`cat.${cat}`)}</span>
+                </div>
               </Link>
             ))}
           </div>

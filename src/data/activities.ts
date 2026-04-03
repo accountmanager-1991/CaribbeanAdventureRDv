@@ -49,7 +49,7 @@ export const activities: Activity[] = [
     currency: "USD",
     duration: "3 hours",
     location: "Sosua Bay, Puerto Plata",
-    image: "/images/snorkeling-sosua.jpg",
+    image: "/images/tour-25.jpg",
     rating: 4.8,
     reviewCount: 124,
     highlights: [
@@ -81,7 +81,7 @@ export const activities: Activity[] = [
     currency: "USD",
     duration: "5 hours",
     location: "Damajagua, Puerto Plata",
-    image: "/images/damajagua.jpg",
+    image: "/images/tour-02.jpg",
     rating: 4.9,
     reviewCount: 312,
     highlights: [
@@ -113,7 +113,7 @@ export const activities: Activity[] = [
     currency: "USD",
     duration: "4 hours",
     location: "Puerto Plata City",
-    image: "/images/cable-car.jpg",
+    image: "/images/tour-05.jpg",
     rating: 4.7,
     reviewCount: 198,
     highlights: [
@@ -145,7 +145,7 @@ export const activities: Activity[] = [
     currency: "USD",
     duration: "3.5 hours",
     location: "Puerto Plata Marina",
-    image: "/images/catamaran.jpg",
+    image: "/images/tour-24.jpg",
     rating: 4.9,
     reviewCount: 267,
     highlights: [
@@ -177,7 +177,7 @@ export const activities: Activity[] = [
     currency: "USD",
     duration: "4 hours",
     location: "Puerto Plata neighborhood",
-    image: "/images/cooking.jpg",
+    image: "/images/tour-03.jpg",
     rating: 5.0,
     reviewCount: 89,
     highlights: [
@@ -209,7 +209,7 @@ export const activities: Activity[] = [
     currency: "USD",
     duration: "3 hours",
     location: "Yasica Adventures, Puerto Plata",
-    image: "/images/zipline.jpg",
+    image: "/images/tour-21.jpg",
     rating: 4.8,
     reviewCount: 156,
     highlights: [
