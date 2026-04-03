@@ -11,8 +11,12 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const [sending, setSending] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setSending(true);
+
     const form = e.currentTarget;
     const data = new FormData(form);
 
@@ -21,24 +25,37 @@ export default function ContactPage() {
     const phone = data.get("phone") as string;
     const date = data.get("date") as string;
     const guests = data.get("guests") as string;
-    const activity = data.get("activity") as string;
+    const activityId = data.get("activity") as string;
     const message = data.get("message") as string;
 
     // Find activity label
     const activityLabel =
-      activity === "other"
+      activityId === "other"
         ? locale === "es" ? "Otro" : "Other"
-        : activityTranslations[locale][activity]?.title ||
-          activities.find((a) => a.id === activity)?.title ||
-          activity;
+        : activityTranslations[locale][activityId]?.title ||
+          activities.find((a) => a.id === activityId)?.title ||
+          activityId;
 
-    const whatsappMessage = locale === "es"
-      ? `🌴 *Nueva Reserva - Caribbean Adventure RD*\n\n👤 *Nombre:* ${name}\n📧 *Email:* ${email}\n📞 *Teléfono:* ${phone}\n📅 *Fecha:* ${date}\n👥 *Personas:* ${guests}\n🎯 *Actividad:* ${activityLabel}${message ? `\n💬 *Mensaje:* ${message}` : ""}`
-      : `🌴 *New Booking - Caribbean Adventure RD*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n📞 *Phone:* ${phone}\n📅 *Date:* ${date}\n👥 *Guests:* ${guests}\n🎯 *Activity:* ${activityLabel}${message ? `\n💬 *Message:* ${message}` : ""}`;
+    // Send email to Junior via API
+    try {
+      await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          date,
+          guests,
+          activity: activityLabel,
+          message,
+        }),
+      });
+    } catch {
+      // Email failed silently — form still shows success
+    }
 
-    const encoded = encodeURIComponent(whatsappMessage);
-    window.open(`https://wa.me/18099743407?text=${encoded}`, "_blank");
-
+    setSending(false);
     setSubmitted(true);
   }
 
@@ -196,9 +213,12 @@ export default function ContactPage() {
 
                   <button
                     type="submit"
-                    className="w-full bg-sunset hover:bg-sunset-dark text-white py-3 rounded-lg font-bold text-lg transition-colors"
+                    disabled={sending}
+                    className="w-full bg-sunset hover:bg-sunset-dark disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-bold text-lg transition-colors"
                   >
-                    {t("form.submit")}
+                    {sending
+                      ? locale === "es" ? "Enviando..." : "Sending..."
+                      : t("form.submit")}
                   </button>
                 </form>
               )}

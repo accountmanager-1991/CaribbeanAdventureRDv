@@ -112,6 +112,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     "footer.rights": "All rights reserved.",
     "footer.privacy": "Privacy Policy",
     "footer.terms": "Terms & Conditions",
+    "footer.cancellation": "Cancellation Policy",
 
     // Privacy
     "privacy.title": "Privacy Policy",
@@ -233,6 +234,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     "footer.rights": "Todos los derechos reservados.",
     "footer.privacy": "Política de Privacidad",
     "footer.terms": "Términos y Condiciones",
+    "footer.cancellation": "Política de Cancelación",
 
     // Privacy
     "privacy.title": "Política de Privacidad",

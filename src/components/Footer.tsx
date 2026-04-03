@@ -85,6 +85,11 @@ export default function Footer() {
                   {t("footer.terms")}
                 </Link>
               </li>
+              <li>
+                <Link href="/cancellation" className="hover:text-white transition-colors">
+                  {t("footer.cancellation")}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
