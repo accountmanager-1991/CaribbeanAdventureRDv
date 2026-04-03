@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
     const { error } = await resend.emails.send({
       from: "Caribbean Adventure RD <onboarding@resend.dev>",
       to: "juniormarte67@gmail.com",
+      cc: "accountmanager@emozca.com",
       subject: `🌴 New Booking: ${activity} - ${name}`,
       html: htmlContent,
       replyTo: email,
