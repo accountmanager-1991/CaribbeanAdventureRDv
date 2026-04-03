@@ -1,22 +1,8 @@
-<!--
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                           SETUP INSTRUCTIONS                                  ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║                                                                              ║
-║  1. Replace [PROJECT_NAME] with your project name                            ║
-║                                                                              ║
-║  2. Log technical debt as you incur it - don't rely on memory                ║
-║                                                                              ║
-║  3. DELETE THIS COMMENT BLOCK when setup is complete                         ║
-║                                                                              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
--->
-
 # Technical Debt Tracker
 
-**Project:** [PROJECT_NAME]
+**Project:** Caribbean Adventure RD
 
-Track shortcuts, workarounds, and "fix later" items. Acknowledging debt is the first step to managing it.
+Track shortcuts, workarounds, and "fix later" items.
 
 ---
 
@@ -24,12 +10,11 @@ Track shortcuts, workarounds, and "fix later" items. Acknowledging debt is the f
 
 | Category | Count | Highest Priority |
 |----------|-------|------------------|
-| Code Quality | 0 | - |
-| Architecture | 0 | - |
-| Testing | 0 | - |
-| Security | 0 | - |
-| Performance | 0 | - |
-| Documentation | 0 | - |
+| Code Quality | 1 | Medium |
+| Architecture | 1 | Medium |
+| Performance | 2 | High |
+| Security | 1 | Medium |
+| Testing | 1 | Medium |
 
 ---
 
@@ -37,112 +22,123 @@ Track shortcuts, workarounds, and "fix later" items. Acknowledging debt is the f
 
 ### High Priority (Fix Soon)
 
-<!-- Items that pose risk or block future work -->
-
 | ID | Category | Description | Added | Impact |
 |----|----------|-------------|-------|--------|
-| TD-001 | [Category] | [Brief description] | [Date] | [Why it matters] |
+| TD-001 | Performance | Unoptimized tour photos (1-2MB each) | 2026-04-03 | Slow page loads, high bandwidth |
+| TD-002 | Performance | 26 original WhatsApp photos still in /public root | 2026-04-03 | Bloats repo and deployment size |
 
 ---
 
 ### Medium Priority (Fix When Convenient)
 
-<!-- Items that should be addressed but aren't urgent -->
-
 | ID | Category | Description | Added | Impact |
 |----|----------|-------------|-------|--------|
-| TD-002 | [Category] | [Brief description] | [Date] | [Why it matters] |
-
----
-
-### Low Priority (Nice to Have)
-
-<!-- Items that would improve things but have minimal impact -->
-
-| ID | Category | Description | Added | Impact |
-|----|----------|-------------|-------|--------|
-| TD-003 | [Category] | [Brief description] | [Date] | [Why it matters] |
+| TD-003 | Security | Resend sends from onboarding@resend.dev | 2026-04-03 | Emails may land in spam |
+| TD-004 | Architecture | Language preference not persisted | 2026-04-03 | Resets to EN on page refresh |
+| TD-005 | Code Quality | Form data not validated server-side | 2026-04-03 | API route trusts all input |
+| TD-006 | Testing | Zero tests | 2026-04-03 | No safety net for changes |
 
 ---
 
 ## Detailed Debt Descriptions
 
-### TD-001: [Title]
+### TD-001: Unoptimized Tour Photos
 
-**Category:** [Code Quality | Architecture | Testing | Security | Performance | Documentation]
-**Priority:** [High | Medium | Low]
-**Added:** [Date]
-**File(s):** `path/to/file.ts`
+**Category:** Performance
+**Priority:** High
+**Added:** 2026-04-03
+**File(s):** `public/images/tour-*.jpg`
 
 **What's the problem?**
-[Describe the current state and why it's technical debt]
+Photos are original resolution from WhatsApp (up to 4160x3123px, 1-2MB each). Hero carousel loads 10 images. Activity cards load 6. This significantly impacts page load time, especially on mobile.
 
 **Why was it done this way?**
-[Context: time pressure, uncertainty, prototype, etc.]
+Speed of initial development — photos were copied directly from WhatsApp without processing.
 
 **What's the ideal solution?**
-[How it should be fixed]
+- Resize to max 1920px wide
+- Compress to ~100-200KB each using sharp or squoosh
+- Consider using Next.js Image component with remote optimization (already using `<Image>` but source files are too large)
+- Add WebP format variants
 
-**Estimated effort:** [Small | Medium | Large]
-
-**Risks if not addressed:**
-- [Risk 1]
-- [Risk 2]
+**Estimated effort:** Small
 
 ---
 
-### TD-002: [Title]
+### TD-002: Original WhatsApp Photos in /public Root
 
-**Category:**
-**Priority:**
-**Added:**
-**File(s):**
+**Category:** Performance
+**Priority:** High
+**Added:** 2026-04-03
+**File(s):** `public/WhatsApp Image *.jpeg` (26 files)
 
 **What's the problem?**
+The original photos with WhatsApp names are still in the public root alongside the renamed copies in `/public/images/`. This doubles the image storage in the repo and deployment.
 
 **Why was it done this way?**
+User dropped photos into public folder; we copied and renamed them to `/images/` but didn't delete the originals.
 
 **What's the ideal solution?**
+Delete all `public/WhatsApp Image *.jpeg` files. The renamed versions in `public/images/` are the ones used by the site.
 
-**Estimated effort:**
+**Estimated effort:** Small
 
-**Risks if not addressed:**
--
+---
+
+### TD-003: Resend Sends from Generic Domain
+
+**Category:** Security
+**Priority:** Medium
+**Added:** 2026-04-03
+**File(s):** `src/app/api/booking/route.ts`
+
+**What's the problem?**
+Emails are sent from `onboarding@resend.dev` because no custom domain is verified in Resend. This looks unprofessional and may trigger spam filters.
+
+**What's the ideal solution?**
+- Verify a custom domain in Resend (e.g., caribbeanadventurerd.com)
+- Update the `from` field in the API route to use the custom domain
+
+**Estimated effort:** Small (once domain is purchased)
+
+---
+
+### TD-004: Language Preference Not Persisted
+
+**Category:** Architecture
+**Priority:** Medium
+**Added:** 2026-04-03
+**File(s):** `src/context/LanguageContext.tsx`
+
+**What's the problem?**
+Language selection (EN/ES) is stored in React state. It resets to English on every page refresh or new visit.
+
+**What's the ideal solution?**
+Store preference in `localStorage` and read it on mount. Or migrate to Next.js i18n routing if SEO in both languages becomes important.
+
+**Estimated effort:** Small
+
+---
+
+### TD-005: No Server-Side Form Validation
+
+**Category:** Code Quality
+**Priority:** Medium
+**Added:** 2026-04-03
+**File(s):** `src/app/api/booking/route.ts`
+
+**What's the problem?**
+The booking API route accepts any JSON body without validation. Malformed or malicious input could cause errors or email injection.
+
+**What's the ideal solution?**
+Add Zod schema validation to the API route. Sanitize all string inputs before inserting into HTML email template.
+
+**Estimated effort:** Small
 
 ---
 
 ## Resolved Debt
 
-Track paid-off debt for reference:
-
 | ID | Description | Added | Resolved | Resolution Notes |
 |----|-------------|-------|----------|------------------|
-| TD-000 | Example: Hardcoded config values | 2024-01-01 | 2024-01-15 | Moved to .env |
-
----
-
-## Debt Prevention Checklist
-
-Before merging, ask:
-
-- [ ] Is this the right solution or a shortcut?
-- [ ] If a shortcut, is it documented in this file?
-- [ ] Are there TODO/FIXME comments that should be tracked here?
-- [ ] Will this make future changes harder?
-
----
-
-## Categories Reference
-
-| Category | Examples |
-|----------|----------|
-| **Code Quality** | Duplicated code, poor naming, missing types, complex functions |
-| **Architecture** | Wrong abstraction, tight coupling, missing layers |
-| **Testing** | Missing tests, flaky tests, inadequate coverage |
-| **Security** | Hardcoded secrets, missing validation, outdated deps |
-| **Performance** | N+1 queries, missing indexes, unoptimized assets |
-| **Documentation** | Missing docs, outdated docs, unclear README |
-
----
-
-*"The best time to address tech debt was when you created it. The second best time is now."*
+| — | None yet | — | — | — |
