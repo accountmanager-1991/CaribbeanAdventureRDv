@@ -8,6 +8,60 @@ This document tracks key technical and architectural decisions made during the p
 
 ## Decisions Log
 
+### 7. Reclaim Domain via DNS Verification (Not Account Recovery)
+
+**Date:** 2026-08-27
+**Status:** Accepted
+**Deciders:** Junior Marte, Eddy Ozoria
+
+#### Context
+After the old Vercel profile was deleted, `caribbeanadventurerd.com` returned `DEPLOYMENT_NOT_FOUND`. DNS at the registrar still pointed correctly at Vercel, but every attempt to attach the domain to the new project failed with `403 domain_not_owned`.
+
+The cause is that Vercel tracks domain ownership at the **account** level, separate from project assignment. Deleting the project released the project binding but not the ownership record, so the domain remained claimed by an account we no longer controlled. The account-scoped DNS target (`f4732b97818d7d82.vercel-dns-017.com`, versus the generic `cname.vercel-dns.com` used by emozca's other domain) confirmed this.
+
+#### Decision
+Reclaimed the domain using Vercel's `_vercel` TXT ownership-verification flow rather than trying to recover access to the old account.
+
+#### Consequences
+- **Positive:** Works using only DNS control, which we have at Squarespace Domains. No dependency on recovering deleted credentials.
+- **Positive:** Establishes that DNS control is the durable source of authority for this domain going forward.
+- **Negative:** Only available through the Vercel dashboard — the CLI's `domains add` returns a flat 403 without offering the challenge, so this step cannot be automated.
+- **Risks:** If the domain is ever moved again, expect the same 403 and reach for TXT verification first rather than debugging DNS.
+
+#### Alternatives Considered
+1. Recover the deleted Vercel account — credentials unavailable; may not be recoverable at all
+2. Remove the domain from the old account's Domains page — requires access we do not have
+3. Transfer the registration into Vercel — heavier, changes the registrar, and unnecessary since DNS already resolved correctly
+
+---
+
+### 6. Pin Framework Preset in vercel.json (Not the Dashboard)
+
+**Date:** 2026-08-27
+**Status:** Accepted
+**Deciders:** Eddy Ozoria
+
+#### Context
+Deployments reported "Ready" while every route returned 404. The Vercel project's Framework Preset was set to **"Other"**, so Vercel skipped the Next.js build and served `public/` as static files with `public` as the output directory. This was the unexplained blocker carried over from Session 1, and it reproduced immediately on the rebuilt project because CLI-created projects default to "Other".
+
+The dashboard toggle is invisible from the repo, is not version-controlled, and silently resets the deployment to a broken state that still reports success.
+
+#### Decision
+Committed `vercel.json` with `"framework": "nextjs"`, making the setting part of the repository rather than dashboard state.
+
+#### Consequences
+- **Positive:** Correct builds survive project recreation, dashboard misconfiguration, and anyone re-linking the project
+- **Positive:** The setting is visible in code review and travels with the repo
+- **Negative:** The project's dashboard preset still reads "Other" — the config masks it rather than correcting it, so `vercel.json` must not be deleted (tracked as TD-009)
+- **Risks:** A future contributor removing `vercel.json` as "unnecessary config" would take the live site down
+
+#### Alternatives Considered
+1. Set the preset in the Vercel dashboard — fixes it once, but is untracked and was already the failure mode twice
+2. Explicit `buildCommand` / `outputDirectory` overrides in `vercel.json` — more brittle, restates what framework detection already handles
+3. Do both — still worth doing in the dashboard as belt-and-braces; the repo setting is the one that must exist
+
+---
+
 ### 5. Client-Side Language Toggle (Not i18n Routing)
 
 **Date:** 2026-04-03

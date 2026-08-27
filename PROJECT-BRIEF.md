@@ -2,7 +2,7 @@
 
 **Project Name:** Caribbean Adventure RD
 **Created:** 2026-04-03
-**Last Updated:** 2026-04-03
+**Last Updated:** 2026-08-27
 **Owner:** Junior Marte
 **Developer:** Eddy Ozoria
 
@@ -64,10 +64,10 @@ Hand-picked, authentic local experiences curated specifically for the DR market,
 
 ## Success Criteria
 
-- [ ] Platform live and accepting bookings
-- [ ] At least 10 adventure activities listed
-- [ ] Successful end-to-end booking and payment flow
-- [ ] Operator dashboard functional for managing listings
+- [x] Platform live and accepting booking inquiries — https://www.caribbeanadventurerd.com (2026-08-27)
+- [ ] At least 10 adventure activities listed — currently 6
+- [ ] Successful end-to-end booking and payment flow — deferred, inquiry-based for now (ADR 3)
+- [ ] Operator dashboard functional for managing listings — not started; activities are static (ADR 2)
 
 ---
 
@@ -75,9 +75,11 @@ Hand-picked, authentic local experiences curated specifically for the DR market,
 
 | Constraint | Details |
 |------------|---------|
-| Platform | Web (Next.js, fully custom) |
-| Hosting | Vercel |
-| Payments | PayPal and/or Stripe |
+| Platform | Web (Next.js 16, fully custom) |
+| Hosting | Vercel (emozca team) |
+| Domain | caribbeanadventurerd.com — DNS at Squarespace Domains |
+| Email | Resend (emozca account) |
+| Payments | Deferred — inquiry-based booking for now |
 | Budget | TBD |
 | Timeline | TBD |
 
@@ -106,10 +108,13 @@ Hand-picked, authentic local experiences curated specifically for the DR market,
 
 ## Open Questions
 
-- [ ] Squarespace integration approach — custom code injection vs headless?
-- [ ] PayPal vs Stripe vs both for payments?
+- [x] ~~Squarespace integration approach — custom code injection vs headless?~~ **Resolved 2026-04-03:** neither. Fully custom Next.js on Vercel (ADR 1). Squarespace remains only as the DNS host.
+- [ ] PayPal vs Stripe vs both for payments? — deferred; MVP is inquiry-based (ADR 3)
 - [ ] Commission/fee structure for operators?
-- [ ] Content: who provides activity photos and descriptions?
+- [ ] Content: who provides activity photos and descriptions? — all 26 current photos came from Junior
+- [ ] Who owns the infrastructure long term? Vercel, Resend and GitHub all sit under Eddy/emozca accounts, while Junior owns the business and domain registration (TD-010)
+
+See [RESEARCH-LOG.md](RESEARCH-LOG.md) for the full open-questions list and research findings.
 
 ---
 

@@ -11,9 +11,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Image optimization (compress tour photos)
-- Custom domain setup
 - Persist language preference in localStorage
 - Server-side form validation with Zod
+- Customer confirmation email after booking submission
+- Resend sender address on a verified domain
+
+---
+
+## [0.3.1] - 2026-08-27
+
+Recovery release. The Vercel project was deleted along with an old profile,
+taking the live site down. No application code changed — this restores
+deployment and pins the configuration that was silently broken from the start.
+
+### Added
+- `vercel.json` pinning `framework: "nextjs"` so git-triggered deploys build correctly
+- `.vercelignore` excluding the 26 duplicate WhatsApp originals from deployments
+- GitHub integration — pushes to `main` now auto-deploy to production
+
+### Fixed
+- Site returned 404 on every route despite deployments reporting "Ready". The Vercel
+  Framework Preset was set to "Other", so Vercel skipped the Next.js build and served
+  `public/` as static files. This was the unresolved blocker from Session 1 and it
+  reproduced on the rebuilt project, since CLI-created projects default to "Other".
+- Custom domain `caribbeanadventurerd.com` served `DEPLOYMENT_NOT_FOUND`. The domain
+  was still owned at the account level by the deleted profile's Vercel account;
+  reclaimed through `_vercel` TXT ownership verification.
+- Apex domain now issues a 308 redirect to `www`, establishing a single canonical host.
+- Git pushes were authenticating as the wrong GitHub account. Added a repo-local
+  credential helper for `accountmanager-1991` so other projects are unaffected.
+
+### Changed
+- Vercel project renamed from `caribbeanadventuerd` (typo) to `caribbean-adventure-rd`
+- `RESEND_API_KEY` re-provisioned on the new project (Production + Development)
 
 ---
 
