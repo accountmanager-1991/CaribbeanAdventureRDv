@@ -1,0 +1,3 @@
+# Stray original WhatsApp photos in public/ root.
+# Duplicates of the renamed files in public/images/ that the site actually uses.
+public/WhatsApp Image *.jpeg
