@@ -10,11 +10,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Tour videos (infrastructure ready; awaiting footage from Junior)
+- More tour videos as footage arrives
 - Persist language preference in localStorage
 - Server-side form validation with Zod
 - Customer confirmation email after booking submission
 - Resend sender address on a verified domain
+
+---
+
+## [0.4.1] - 2026-09-23
+
+### Added
+- 8 new photos from Junior (`tour-27`–`tour-34`): the Mount Isabel de Torres
+  viewpoint, the cacao and coffee houses, a north-coast beach, garden wildlife
+  and a tour group arriving at the tobacco stop
+- **Coffee & Chocolate** gallery category — four of the new photos are the
+  cacao/coffee stops, which no existing category covered
+- First tour video (`tour-highlights.mp4`), so the Tour Videos section on
+  `/gallery` now renders instead of staying hidden
+
+### Changed
+- Hero carousel now leads with the Mount Isabel de Torres panorama and
+  includes a coffee shot; 12 → 14 slides
+- Gallery now holds 34 photos
+
+### Notes
+- The video needed no transcoding: 848×478, 4.2s, 898 KB, with its `moov` atom
+  already at the front, so it streams rather than downloading in full first.
+  Verified in production returning HTTP 206 for range requests.
+- No ffmpeg available on the build machine, so the video poster is a still
+  photo rather than an extracted frame.
 
 ---
 

@@ -26,7 +26,8 @@
 | Simplified 16px icon variant | Done | Full mark smears to grey at 16px; single-wave variant used instead |
 | Open Graph image + metadata | Done | Was entirely absent — no OG, no canonical, no `metadataBase` |
 | Photo gallery page (`/gallery`) | Done | 4 category filters, keyboard-accessible lightbox |
-| Bilingual captions for 26 photos | Done | EN/ES, doubling as alt text |
+| Bilingual captions for all photos | Done | EN/ES, doubling as alt text |
+| Import 8 new photos + first video | Done | tour-27..34; Coffee & Chocolate category added |
 | Compress all photos (TD-001) | Done | 20.5 MB → 9.3 MB |
 | Fix two sideways photos | Done | tour-13, tour-19 stored rotated with no EXIF flag |
 | Video section scaffolding | Done | Hidden until `galleryVideos` is populated |
@@ -49,25 +50,26 @@
 
 ## In Progress
 
-### Tour videos — waiting on footage
+### More media as it arrives
 
-The gallery page has a **Tour Videos** section that is fully built but renders
-nothing while `galleryVideos` in `src/data/gallery.ts` is empty, so the live
-site shows no empty placeholder.
+The first video is live and the pipeline is proven end to end. Junior sends
+files → they go in `public/videos/` or `public/images/` → an entry is added to
+`src/data/gallery.ts`.
 
-**To finish:** Junior sends video files → drop them in `public/videos/` → add an
-entry per video in `galleryVideos`. Full instructions and an ffmpeg compression
-command are in `public/videos/README.md`.
+**Confirm the video title.** `tour-highlights.mp4` has a provisional title and a
+still-photo poster, because no ffmpeg is available here to extract a frame and
+the clip contents were not described. One line in `galleryVideos` to correct.
 
 **Important:** videos are served straight from `/public` with no optimisation,
-unlike photos. A raw phone video is often 50–150 MB. Compress before committing.
+unlike photos. This clip was already small (898 KB); a raw phone video is often
+50–150 MB. See `public/videos/README.md`.
 
 ---
 
 ## Next Up (Priority Order)
 
 1. **Resend sender address** (TD-003) — still the highest-value open item; Junior may be missing inquiries to spam
-2. **Tour videos** — once footage arrives
+2. **Confirm the video title** — `tour-highlights.mp4` title and poster are provisional
 3. **Customer confirmation email** (TD-008)
 4. **Google Search Console** — request re-indexing so the new favicon and OG image are picked up sooner
 5. **Preview env var** (TD-007)
@@ -180,7 +182,7 @@ unlike photos. A raw phone video is often 50–150 MB. Compress before committin
 | Photo gallery | Complete | 100% |
 | Brand icons & social metadata | Complete | 100% |
 | Image optimization | Complete | 100% |
-| Tour videos | Blocked | 50% — built, awaiting footage |
+| Tour videos | Complete | 100% — first video live |
 | Payment integration | Not Started | 0% |
 
-**Overall Milestone Progress:** 97%
+**Overall Milestone Progress:** 98%
