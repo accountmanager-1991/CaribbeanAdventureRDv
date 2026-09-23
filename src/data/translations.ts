@@ -7,6 +7,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     "nav.adventures": "Adventures",
     "nav.about": "About",
     "nav.contact": "Contact",
+    "nav.gallery": "Gallery",
     "nav.bookNow": "Book Now",
 
     // Hero
@@ -121,6 +122,19 @@ export const translations: Record<Locale, Record<string, string>> = {
     // Terms
     "terms.title": "Terms & Conditions",
     "terms.lastUpdated": "Last Updated",
+
+    // Gallery
+    "gallery.title": "Photo Gallery",
+    "gallery.subtitle":
+      "Real moments from real tours — our guests exploring Puerto Plata, the coast and everything in between.",
+    "gallery.close": "Close",
+    "gallery.previous": "Previous photo",
+    "gallery.next": "Next photo",
+    "gallery.videosTitle": "Tour Videos",
+    "gallery.videosSubtitle": "See the adventures in motion.",
+    "gallery.ctaTitle": "Ready to make your own memories?",
+    "gallery.ctaSubtitle":
+      "Tell us what you would like to see and we will put together the right tour for you.",
   },
   es: {
     // Nav
@@ -128,6 +142,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     "nav.adventures": "Aventuras",
     "nav.about": "Nosotros",
     "nav.contact": "Contacto",
+    "nav.gallery": "Galería",
     "nav.bookNow": "Reservar",
 
     // Hero
@@ -243,6 +258,19 @@ export const translations: Record<Locale, Record<string, string>> = {
     // Terms
     "terms.title": "Términos y Condiciones",
     "terms.lastUpdated": "Última Actualización",
+
+    // Gallery
+    "gallery.title": "Galería de Fotos",
+    "gallery.subtitle":
+      "Momentos reales de tours reales — nuestros huéspedes explorando Puerto Plata, la costa y todo lo demás.",
+    "gallery.close": "Cerrar",
+    "gallery.previous": "Foto anterior",
+    "gallery.next": "Foto siguiente",
+    "gallery.videosTitle": "Videos de los Tours",
+    "gallery.videosSubtitle": "Mira las aventuras en movimiento.",
+    "gallery.ctaTitle": "¿Listo para crear tus propios recuerdos?",
+    "gallery.ctaSubtitle":
+      "Cuéntanos qué te gustaría ver y armaremos el tour ideal para ti.",
   },
 };
 

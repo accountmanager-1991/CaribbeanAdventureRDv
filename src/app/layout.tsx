@@ -16,12 +16,39 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://www.caribbeanadventurerd.com";
+const TITLE = "Caribbean Adventure RD | Puerto Plata, Dominican Republic";
+const DESCRIPTION =
+  "Discover curated adventure experiences in Puerto Plata, Dominican Republic. Book snorkeling, hiking, cultural tours, and more with local operators.";
+
 export const metadata: Metadata = {
-  title: "Caribbean Adventure RD | Puerto Plata, Dominican Republic",
-  description:
-    "Discover curated adventure experiences in Puerto Plata, Dominican Republic. Book snorkeling, hiking, cultural tours, and more with local operators.",
+  // Required for opengraph-image and canonical URLs to resolve absolutely.
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
   keywords:
     "Puerto Plata, Dominican Republic, adventures, tours, snorkeling, hiking, travel, Caribbean",
+  applicationName: "Caribbean Adventure RD",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "Caribbean Adventure RD",
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    locale: "en_US",
+    alternateLocale: "es_DO",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({
