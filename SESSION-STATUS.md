@@ -35,6 +35,7 @@
 | Fix deprecated `priority` prop | Done | Next.js 16 deprecation; now `loading` + `fetchPriority` |
 | Remove create-next-app leftovers | Done | 5 unused SVGs including `vercel.svg` |
 | Deploy and verify | Done | Commit `0880a48`, all routes 200 |
+| Fix Resend sender (TD-003) | Done | `bookings@emozca.com`; test send confirmed `delivered` |
 
 ---
 
@@ -68,9 +69,8 @@ unlike photos. This clip was already small (898 KB); a raw phone video is often
 
 ## Next Up (Priority Order)
 
-1. **Resend sender address** (TD-003) — still the highest-value open item; Junior may be missing inquiries to spam
+1. **Customer confirmation email** (TD-008) — now unblocked; customers still receive nothing after submitting
 2. **Confirm the video title** — `tour-highlights.mp4` title and poster are provisional
-3. **Customer confirmation email** (TD-008)
 4. **Google Search Console** — request re-indexing so the new favicon and OG image are picked up sooner
 5. **Preview env var** (TD-007)
 6. **Google Analytics**
@@ -82,7 +82,6 @@ unlike photos. This clip was already small (898 KB); a raw phone video is often
 
 | Issue | Severity | Status | Notes |
 |-------|----------|--------|-------|
-| Booking emails send from `onboarding@resend.dev` | High | Open | Junior may silently miss inquiries (TD-003) |
 | No customer confirmation email | Medium | Open | Form submits, customer receives nothing (TD-008) |
 | Activity titles are English-only | Medium | Open | `activities.ts` holds untranslated strings; the UI chrome around them switches language but the content does not |
 | Google may take days to refresh the icon | Low | Expected | Favicon is correct at the source; Google re-crawls on its own schedule |

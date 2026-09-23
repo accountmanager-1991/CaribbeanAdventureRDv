@@ -18,6 +18,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.2] - 2026-09-23
+
+### Fixed
+- Booking emails now send from `bookings@emozca.com` instead of
+  `onboarding@resend.dev` (TD-003). The old address was Resend's shared sender
+  for unverified accounts and risked Gmail filtering booking inquiries into
+  spam — on an inquiry-only site with no other notification path, that meant
+  Junior could silently lose bookings.
+
+`emozca.com` had been verified in Resend since March, so no DNS setup was
+needed. Confirmed before deploying with a test send from the new address to
+`accountmanager@emozca.com` only — deliberately not to Junior — which Resend
+reported as `delivered`.
+
+Recipients are unchanged: to Junior, CC `accountmanager@emozca.com`, reply-to
+the customer. This also unblocks TD-008, the customer confirmation email, which
+required a verified sender.
+
+---
+
 ## [0.4.1] - 2026-09-23
 
 ### Added
