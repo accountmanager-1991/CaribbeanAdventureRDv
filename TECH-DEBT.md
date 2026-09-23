@@ -1,7 +1,7 @@
 # Technical Debt Tracker
 
 **Project:** Caribbean Adventure RD
-**Last Updated:** 2026-08-27
+**Last Updated:** 2026-09-23
 
 Track shortcuts, workarounds, and "fix later" items.
 
@@ -13,7 +13,6 @@ Track shortcuts, workarounds, and "fix later" items.
 |----------|-------|------------------|
 | Code Quality | 1 | Medium |
 | Architecture | 1 | Medium |
-| Performance | 1 | High |
 | Deliverability | 2 | High |
 | Infrastructure | 3 | Medium |
 | Testing | 1 | Medium |
@@ -26,7 +25,6 @@ Track shortcuts, workarounds, and "fix later" items.
 
 | ID | Category | Description | Added | Impact |
 |----|----------|-------------|-------|--------|
-| TD-001 | Performance | Unoptimized tour photos (1-2MB each) | 2026-04-03 | Slow page loads, high bandwidth |
 | TD-003 | Deliverability | Booking emails send from `onboarding@resend.dev` | 2026-04-03 | Junior may silently miss booking inquiries |
 
 ---
@@ -54,10 +52,10 @@ Track shortcuts, workarounds, and "fix later" items.
 
 ## Detailed Debt Descriptions
 
-### TD-001: Unoptimized Tour Photos
+### TD-001: Unoptimized Tour Photos  [RESOLVED 2026-09-23]
 
 **Category:** Performance
-**Priority:** High
+**Priority:** ~~High~~ Resolved
 **Added:** 2026-04-03
 **File(s):** `public/images/tour-*.jpg`
 
@@ -67,13 +65,21 @@ Photos are original resolution from WhatsApp (up to 4160x3123px, 1-2MB each). He
 **Why was it done this way?**
 Speed of initial development — photos were copied directly from WhatsApp without processing.
 
-**What's the ideal solution?**
-- Resize to max 1920px wide
-- Compress to ~100-200KB each using sharp or squoosh
-- Consider using Next.js Image component with remote optimization (already using `<Image>` but source files are too large)
-- Add WebP format variants
+**How it was resolved (2026-09-23)**
+All 26 photos re-encoded with sharp: **20.5 MB → 9.3 MB (54% smaller)**, capped
+at 1920px on the **longest** side, mozjpeg quality 82, progressive.
 
-**Estimated effort:** Small
+One trap worth recording: capping only the *width* is not enough. `tour-01` and
+`tour-11` are 9:16 portrait phone photos. A width cap of 1920 left them at
+1920×3415 — 6.6 megapixels and still ~1.2 MB each. Constraining both dimensions
+(`fit: "inside"`) brought them to 1080×1920 and ~500 KB.
+
+WebP variants were not added: the site serves everything through `next/image`,
+which already negotiates WebP/AVIF per request. Pre-generating them would
+duplicate work the optimizer does anyway.
+
+Originals are preserved — the untouched WhatsApp exports remain in `public/`
+root (untracked, excluded from deploys by `.vercelignore`).
 
 ---
 
@@ -232,4 +238,5 @@ If and when Junior takes full ownership of the site, verify `caribbeanadventurer
 
 | ID | Description | Added | Resolved | Resolution Notes |
 |----|-------------|-------|----------|------------------|
+| TD-001 | Unoptimized tour photos (1-2MB each) | 2026-04-03 | 2026-09-23 | Re-encoded all 26 with sharp: 20.5 MB → 9.3 MB, both dimensions capped at 1920px. Capping width alone had left two 6.6MP portrait images untouched. Originals preserved untracked in `public/`. See the detailed entry above. |
 | TD-002 | 26 original WhatsApp photos in `/public` root | 2026-04-03 | 2026-08-27 | **Mitigated, not deleted.** `.vercelignore` excludes `public/WhatsApp Image *.jpeg` from deployments; verified returning 404 in production. The files remain untracked on disk locally and are not in git, so they no longer bloat the repo or the deployment. Deleting the local copies is safe whenever desired — `public/images/` holds the renamed versions the site uses. |

@@ -59,16 +59,24 @@ src/
   app/
     page.tsx              Landing page — hero carousel, categories, featured
     adventures/           Activity listings with category filter
+    gallery/              Photo gallery with filters and lightbox
     about/                Puerto Plata history and owner bio
     contact/              Booking inquiry form, map, WhatsApp
     privacy/ terms/ cancellation/    Legal pages (EN/ES)
     api/booking/route.ts  Resend email notification endpoint
-  components/             Header, Footer, TopBanner, ActivityCard, HeroCarousel
+    icon.svg              Brand mark — source for all generated icons
+    opengraph-image.tsx   Social share image, generated with next/og
+  components/             Header, Footer, TopBanner, ActivityCard,
+                          HeroCarousel, PhotoGallery, VideoGallery
   context/                LanguageContext — EN/ES toggle
   data/
     activities.ts         Activity data model — add new activities here
+    gallery.ts            Gallery photos and videos, with EN/ES captions
     translations.ts       All EN/ES strings — add new copy here
+scripts/
+  generate-icons.mjs      Regenerates favicon/apple/PWA icons from icon.svg
 public/images/            Tour photos (tour-01 … tour-26)
+public/videos/            Tour videos — see its README before adding any
 ```
 
 **Content is static.** Activities live in TypeScript, not a database, so adding

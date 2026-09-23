@@ -1,7 +1,7 @@
 # Research Log
 
 **Project:** Caribbean Adventure RD
-**Last Updated:** 2026-08-27
+**Last Updated:** 2026-09-23
 
 Track questions that need answers, research findings, and useful external resources discovered during development.
 
@@ -15,14 +15,134 @@ Track questions that need answers, research findings, and useful external resour
 | 2 | Who ultimately owns the infrastructure — Eddy or Junior? | Medium | Open | Vercel, Resend and the GitHub repo all sit under Eddy/emozca accounts today. Junior owns the business and the domain registration |
 | 3 | Commission/fee structure for operators? | Medium | Open | Carried over from PROJECT-BRIEF; unresolved |
 | 4 | Payment integration — PayPal, Stripe, or both? | Medium | Open | Deferred by ADR 3 (inquiry-based MVP). Revisit when booking volume justifies it |
-| 5 | Content: who provides new activity photos and descriptions? | Medium | Open | All 26 current photos came from Junior via WhatsApp |
+| 5 | Content: who provides new activity photos and descriptions? | Medium | Open | All 26 current photos came from Junior via WhatsApp; videos pending |
 | 6 | Does SEO in both EN and ES matter? | Low | Open | Decides whether ADR 5 (client-side toggle) needs migrating to i18n routing |
+| 7 | Should activity titles and descriptions be translated? | Medium | Open | `activities.ts` holds English-only strings while the UI chrome around them switches language |
 
 Resolved: the Squarespace-vs-custom question from PROJECT-BRIEF is settled by ADR 1 — fully custom Next.js, no Squarespace. Squarespace remains only as the DNS host.
 
 ---
 
 ## Research Findings
+
+### 2026-09-23 — Why Google showed the Vercel logo as the site icon
+
+**Question:** Search results displayed a black circle with a white triangle — the
+Vercel logo — instead of anything belonging to Caribbean Adventure RD. Was this a
+Vercel setting, a deployment artefact, or something in the code?
+
+**Summary:** None of those. `src/app/favicon.ico` was still the **create-next-app
+default**, shipped with the scaffold and never replaced. Google was faithfully
+displaying the site's own declared favicon.
+
+**Details:**
+The giveaway was file timestamps:
+
+```
+Apr  3 10:22  src/app/favicon.ico
+Apr  3 10:22  public/next.svg, vercel.svg, file.svg, globe.svg, window.svg
+```
+
+Identical to the second — all scaffold files from `create-next-app`. Comparing a
+suspect asset's timestamp against known-scaffold files identifies "never
+replaced" in seconds, with no need to inspect image contents.
+
+Two constraints worth remembering:
+
+1. **Google requires a favicon of at least 48×48.** Next.js derives the `sizes`
+   attribute from the largest frame in the `.ico`, so the container itself needs
+   a 48px entry. A 16/32 file is fine for browser tabs but not for search.
+2. **A mark legible at 512px can be unreadable at 16px.** The two-wave logo
+   turned into a grey smear. The fix was to render a simplified single-wave
+   variant for the 16px frame only. Verify by upscaling the *real* 16px render
+   with nearest-neighbour rather than eyeballing the vector.
+
+Next.js file conventions used (`app/`): `favicon.ico`, `icon.svg`,
+`apple-icon.png`, `opengraph-image.tsx`. Note that **any** `app/icon*` file is
+treated as an icon route, so a build-time-only source such as `icon-16.svg` must
+not live in `app/` — it would be published as a live icon.
+
+Google re-crawls favicons on its own schedule, so the search result can lag the
+fix by days. Requesting re-indexing in Search Console shortens that.
+
+**Sources:**
+- `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/01-metadata/app-icons.md`
+- `curl -s <url> | grep '<link rel="icon"'` — confirms what the site declares
+
+**Action Items:**
+- [x] Replace the default favicon with a brand mark at 16/32/48px
+- [x] Add `apple-icon`, PWA icons, and an Open Graph image
+- [ ] Request re-indexing in Google Search Console
+
+---
+
+### 2026-09-23 — Compressing the tour photos without breaking the portraits
+
+**Question:** How much can the 26 WhatsApp photos be reduced, and why did the
+first pass barely touch two of them?
+
+**Summary:** 20.5 MB → 9.3 MB (54%). The first pass capped **width** at 1920px,
+which does nothing for portrait images. Capping the longest side instead
+(`fit: "inside"`) is what actually bounds the pixel count.
+
+**Details:**
+`tour-01` and `tour-11` are 9:16 phone photos. A width cap left them at
+1920×3415 — 6.6 megapixels, still ~1.2 MB each, larger than any landscape shot
+in the set. With both dimensions capped they became 1080×1920 at ~500 KB.
+
+Settings used: `fit: "inside"` at 1920px, mozjpeg quality 82, progressive.
+
+WebP variants were deliberately **not** generated: the site serves images through
+`next/image`, which already negotiates WebP/AVIF per request. Pre-generating them
+duplicates work the optimizer does anyway.
+
+Separately, `tour-13` and `tour-19` rendered rotated 90°. They carried **no EXIF
+orientation flag**, so `sharp.rotate()` had nothing to correct and neither would
+a browser — they were simply stored sideways and had to be rotated explicitly.
+A contact-sheet montage of the whole set caught this immediately; metadata alone
+would not have.
+
+**Sources:**
+- `sharp` 0.34.5, bundled with Next.js 16 — no extra dependency needed
+- `scripts/generate-icons.mjs` uses the same library
+
+**Action Items:**
+- [x] Compress all 26 photos (closes TD-001)
+- [x] Rotate the two sideways photos
+- [ ] Compress videos before committing them — see `public/videos/README.md`
+
+---
+
+### 2026-09-23 — Next.js 16 deprecated the Image `priority` prop
+
+**Question:** What is the current way to prioritise the LCP image?
+
+**Summary:** `priority` is **deprecated in Next.js 16** in favour of `preload`.
+But the docs then advise against `preload` for most cases: "In most cases, you
+should use `loading="eager"` or `fetchPriority="high"` instead."
+
+**Details:**
+`HeroCarousel` still used `priority={i === 0}`. Replaced with:
+
+```tsx
+loading={i === 0 ? "eager" : "lazy"}
+fetchPriority={i === 0 ? "high" : "auto"}
+```
+
+Also changed in v16: the `qualities` config now defaults to `[75]`.
+
+This is precisely the drift `AGENTS.md` warns about — the version's own docs in
+`node_modules/next/dist/docs/` are authoritative over anything remembered from
+older Next.js.
+
+**Sources:**
+- `node_modules/next/dist/docs/01-app/03-api-reference/02-components/image.md`
+
+**Action Items:**
+- [x] Replace `priority` in `HeroCarousel`
+- [ ] Watch for other deprecated APIs when touching older components
+
+---
 
 ### 2026-08-27 — Why a "Ready" Vercel deployment served 404s on every route
 

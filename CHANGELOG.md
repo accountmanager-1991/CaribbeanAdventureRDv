@@ -10,11 +10,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Image optimization (compress tour photos)
+- Tour videos (infrastructure ready; awaiting footage from Junior)
 - Persist language preference in localStorage
 - Server-side form validation with Zod
 - Customer confirmation email after booking submission
 - Resend sender address on a verified domain
+
+---
+
+## [0.4.0] - 2026-09-23
+
+### Added
+- Photo gallery page (`/gallery`) with category filters — City & Culture,
+  Nature, Beach & Coast, Our Guests
+- Lightbox with keyboard navigation (Esc to close, arrow keys to move) that
+  returns focus to the thumbnail it was opened from
+- Bilingual EN/ES captions for all 26 photos, doubling as alt text
+- Brand icon: a sun-and-waves mark in the site's ocean/sunset palette
+  (`src/app/icon.svg`), plus `favicon.ico` at 16/32/48px, a 180px Apple touch
+  icon and 192/512px PWA icons
+- `scripts/generate-icons.mjs` to regenerate all icons from the source mark
+- Open Graph image for link previews, generated with `next/og`
+- Open Graph, Twitter card, canonical URL, `metadataBase` and robots metadata
+- Video gallery section, hidden until `galleryVideos` is populated
+- `public/videos/README.md` documenting how to add and compress videos
+
+### Fixed
+- **Google displayed the Vercel logo as the site icon.** `src/app/favicon.ico`
+  was still the create-next-app default — it carried the same timestamp as the
+  other scaffold files and had never been replaced.
+- `tour-13` and `tour-19` displayed rotated 90°; they were stored sideways with
+  no EXIF orientation flag for the renderer to correct
+- Hero carousel no longer includes a portrait photo that was being cropped to a
+  narrow sliver in the full-bleed layout
+- Replaced the `priority` prop, deprecated in Next.js 16, with `loading` and
+  `fetchPriority`
+
+### Changed
+- Compressed all 26 tour photos: **20.5 MB → 9.3 MB** (TD-001). Both dimensions
+  are now capped at 1920px; a width-only cap had left two 6.6-megapixel
+  portrait images essentially untouched.
+- Hero carousel expanded from 10 to 12 slides, now including the coastline and
+  Fort San Felipe
+- All 26 photos are now used; 11 had been sitting unreferenced on disk
+
+### Removed
+- Five unused create-next-app scaffold SVGs, including `vercel.svg`
 
 ---
 
