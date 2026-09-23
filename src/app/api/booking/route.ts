@@ -55,7 +55,12 @@ export async function POST(req: NextRequest) {
     `;
 
     const { error } = await resend.emails.send({
-      from: "Caribbean Adventure RD <onboarding@resend.dev>",
+      // Must be an address on a domain verified in Resend. `emozca.com` is
+      // verified; the previous `onboarding@resend.dev` is Resend's shared
+      // sender and risked Gmail filtering booking inquiries into spam.
+      // Only Junior and Eddy ever see this address — replyTo carries the
+      // customer, so replying from Gmail reaches them directly.
+      from: "Caribbean Adventure RD <bookings@emozca.com>",
       to: "juniormarte67@gmail.com",
       cc: "accountmanager@emozca.com",
       subject: `🌴 New Booking: ${activity} - ${name}`,
