@@ -6,8 +6,10 @@ import Image from "next/image";
 // Landscape shots only — the hero is full-bleed, so portrait images
 // (tour-01, tour-11) get cropped to a sliver and are left to the gallery.
 const heroImages = [
+  "/images/tour-28.jpg", // Puerto Plata from Mount Isabel de Torres
   "/images/tour-25.jpg", // Caribbean coastline
   "/images/tour-13.jpg", // Fort San Felipe
+  "/images/tour-32.jpg", // Dominican coffee
   "/images/tour-03.jpg", // casita típica
   "/images/tour-16.jpg", // umbrella street
   "/images/tour-04.jpg",

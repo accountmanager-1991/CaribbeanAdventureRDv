@@ -1,6 +1,6 @@
 import type { Locale } from "./translations";
 
-export type GalleryCategory = "city" | "nature" | "beach" | "groups";
+export type GalleryCategory = "city" | "nature" | "beach" | "food" | "groups";
 
 export interface GalleryPhoto {
   /** File in /public/images */
@@ -28,10 +28,36 @@ export const galleryCategories: {
   { id: "city", label: { en: "City & Culture", es: "Ciudad y cultura" } },
   { id: "nature", label: { en: "Nature", es: "Naturaleza" } },
   { id: "beach", label: { en: "Beach & Coast", es: "Playa y costa" } },
+  { id: "food", label: { en: "Coffee & Chocolate", es: "Café y chocolate" } },
   { id: "groups", label: { en: "Our Guests", es: "Nuestros huéspedes" } },
 ];
 
 export const galleryPhotos: GalleryPhoto[] = [
+  {
+    src: "tour-28.jpg",
+    caption: {
+      en: "Puerto Plata and the harbour seen from Mount Isabel de Torres",
+      es: "Puerto Plata y el puerto vistos desde la Loma Isabel de Torres",
+    },
+    category: "nature",
+  },
+  {
+    src: "tour-27.jpg",
+    caption: {
+      en: "Cacao beans drying at the Dominican chocolate house",
+      es: "Granos de cacao secándose en la casa del chocolate dominicano",
+    },
+    category: "food",
+  },
+  {
+    src: "tour-29.jpg",
+    caption: {
+      en: "White sand and turquoise water on the north coast",
+      es: "Arena blanca y agua turquesa en la costa norte",
+    },
+    category: "beach",
+    portrait: true,
+  },
   {
     src: "tour-13.jpg",
     caption: {
@@ -242,6 +268,48 @@ export const galleryPhotos: GalleryPhoto[] = [
     },
     category: "groups",
   },
+  {
+    src: "tour-30.jpg",
+    caption: {
+      en: "A peacock in the gardens",
+      es: "Un pavo real en los jardines",
+    },
+    category: "nature",
+    portrait: true,
+  },
+  {
+    src: "tour-31.jpg",
+    caption: {
+      en: "Arriving at the tobacco and rum stop",
+      es: "Llegando a la parada de tabaco y ron",
+    },
+    category: "groups",
+    portrait: true,
+  },
+  {
+    src: "tour-33.jpg",
+    caption: {
+      en: "El Rincón del Café, the specialty coffee and chocolate stop",
+      es: "El Rincón del Café, la parada de café y chocolate de especialidad",
+    },
+    category: "food",
+  },
+  {
+    src: "tour-32.jpg",
+    caption: {
+      en: "Dominican coffee from every growing region",
+      es: "Café dominicano de todas las regiones productoras",
+    },
+    category: "food",
+  },
+  {
+    src: "tour-34.jpg",
+    caption: {
+      en: "Local chocolate and cacao products to take home",
+      es: "Chocolate y productos de cacao locales para llevar a casa",
+    },
+    category: "food",
+  },
 ];
 
 /**
@@ -255,4 +323,14 @@ export const galleryPhotos: GalleryPhoto[] = [
  * transcoding, so a large file is a slow page for everyone on mobile data.
  * See public/videos/README.md.
  */
-export const galleryVideos: GalleryVideo[] = [];
+export const galleryVideos: GalleryVideo[] = [
+  {
+    // 848x478, 4.2s, 898KB, already faststart — no transcoding needed.
+    src: "tour-highlights.mp4",
+    poster: "tour-28.jpg",
+    title: {
+      en: "A moment from the Puerto Plata tour",
+      es: "Un momento del tour por Puerto Plata",
+    },
+  },
+];
